@@ -1,6 +1,7 @@
 package router
 
 import (
+	orderRouter "demo/oms/order/router"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,8 +18,8 @@ func Create() http.Handler {
 		})
 	})
 
-	// orderGroup := r.Group("/order")
-	// orderRouter.InjectOrderRoutes(orderGroup)
+	v1 := r.Group("/v1")
+	orderRouter.InjectOrderRoutes(v1)
 
 	return r
 }
