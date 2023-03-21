@@ -4,12 +4,14 @@ package services
 
 import (
 	"demo/oms/order/data/models"
+	"demo/oms/order/domain/entities"
 	"demo/oms/order/domain/repositories"
 )
 
 // OrderService is...
 type OrderService interface {
-	GetOrderByID(id int64) (models.Order, error)
+	GetOrderByID(id int64) (*models.Order, error)
+	CreateOrder(input entities.CreateOrderInput) (*models.Order, error)
 }
 
 // The NewOrderService function is a factory function that returns a new instance of the orderService
@@ -22,8 +24,10 @@ type orderService struct {
 }
 
 // The GetOrderByID method of the orderService struct utilizes the OrderRepository instance, by calling the GetByID method on it, and returns any order and errors received.
-func (service *orderService) GetOrderByID(id int64) (models.Order, error) {
-	order, err := service.repo.GetByID(id)
+func (service *orderService) GetOrderByID(id int64) (*models.Order, error) {
+	return service.repo.GetByID(id)
+}
 
-	return order, err
+func (service *orderService) CreateOrder(input entities.CreateOrderInput) (*models.Order, error) {
+	return service.repo.Create(input)
 }

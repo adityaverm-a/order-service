@@ -13,7 +13,7 @@ import (
 type OrderController interface {
 	// GetOrders(gCtx *gin.Context)
 	GetOrder(gCtx *gin.Context)
-	// CreateOrder(gCtx *gin.Context)
+	CreateOrder(gCtx *gin.Context)
 	// UpdateOrder(gCtx *gin.Context)
 }
 
@@ -68,37 +68,26 @@ func (c *orderController) GetOrder(gCtx *gin.Context) {
 }
 
 // AddToCart adds an item in cart based on inputs and returns updated cart or error
-// func (c *orderController) CreateOrder(gCtx *gin.Context) {
-// 	var input models.AddItemInput
-// 	if err := gCtx.ShouldBindQuery(&input); err != nil {
-// 		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
-// 		return
-// 	}
+func (c *orderController) CreateOrder(gCtx *gin.Context) {
+	var input entities.CreateOrderInput
+	if err := gCtx.ShouldBindQuery(&input); err != nil {
+		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
+		return
+	}
 
-// 	if err := gCtx.ShouldBind(&input); err != nil {
-// 		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
-// 		return
-// 	}
+	if err := gCtx.ShouldBind(&input); err != nil {
+		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
+		return
+	}
 
-// 	addItemInput, err := mappers.NewAddItemInputMapper().ToEntity(input)
-// 	if err != nil {
-// 		c.SendWithError(gCtx, err)
-// 	}
+	order, err := c.orderService.CreateOrder(input)
+	if err != nil {
+		c.SendWithError(gCtx, err)
+		return
+	}
 
-// 	cart, err := c.cartService.AddItem(gCtx.Request.Context(), *addItemInput)
-// 	if err != nil {
-// 		c.SendWithError(gCtx, err)
-// 		return
-// 	}
-
-// 	cartModel, err := mappers.NewCartMapper().ToModel(*cart)
-// 	if err != nil {
-// 		c.SendWithError(gCtx, err)
-// 		return
-// 	}
-
-// 	c.Send(gCtx, cartModel)
-// }
+	c.Send(gCtx, order)
+}
 
 // AddMultipleItemsToCart adds multiple items in cart based on inputs and returns updated cart or error
 // func (c *orderController) UpdateOrder(gCtx *gin.Context) {
