@@ -66,7 +66,7 @@ func (or *orderRepo) GetByID(id int64) (*models.Order, error) {
 	}
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, nil
+		return nil, OrderNotFound
 	}
 
 	return &order, nil
