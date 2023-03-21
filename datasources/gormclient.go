@@ -4,17 +4,20 @@ import (
 	"demo/oms/config"
 	"fmt"
 
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-// getSQLXClient connects to a mysql server and returns ...
-func getSQLXClient() (*sqlx.DB, error) {
+// getGORMClient connects to a mysql server and returns ...
+func getGORMClient() (*gorm.DB, error) {
 	inputConfig := config.Config.SQL
 
-	dataSourceNames := getFormattedDataSourceName(inputConfig)
+	dataSourceName := getFormattedDataSourceName(inputConfig)
 
-	db, err := sqlx.Open(inputConfig.DriverName, dataSourceNames)
+	cfg := &gorm.Config{
+		SkipDefaultTransaction: true,
+	}
+	db, err := gorm.Open(mysql.Open(dataSourceName), cfg)
 	if err != nil {
 		return nil, err
 	}

@@ -12,13 +12,14 @@ type Container interface {
 	InjectOrderController() controllers.OrderController
 }
 
-// NewContainer is...
+// NewContainer creates a new Container instance
 func NewContainer() Container {
 	return &container{}
 }
 
 type container struct{}
 
+// InjectOrderController injects an instance of the OrderController
 func (c *container) InjectOrderController() controllers.OrderController {
 	orderService, err := InjectOrderService()
 	if err != nil {
@@ -28,14 +29,10 @@ func (c *container) InjectOrderController() controllers.OrderController {
 	return controllers.NewOrderController(orderService)
 }
 
+// InjectOrderService injects an instance of the OrderService
 func InjectOrderService() (services.OrderService, error) {
-	dataSources, err := datasources.Get()
 
-	if err != nil {
-		panic(1)
-	}
-
-	sqlClient := dataSources.SQLXClient
+	sqlClient := datasources.GetSQLClient()
 	orderRepository := repositories.NewOrderRepository(sqlClient)
 
 	orderService := services.NewOrderService(orderRepository)

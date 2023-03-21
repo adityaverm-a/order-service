@@ -4,5 +4,5 @@ import "demo/oms/order/data/models"
 
 // OrderRepository is...
 type OrderRepository interface {
-	GetByID(id int64) (*models.Persons, error)
+	GetByID(id int64) (models.Order, error)
 }

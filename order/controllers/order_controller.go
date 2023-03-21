@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"demo/oms/app/controller"
+	"demo/oms/order/domain/entities"
 	"demo/oms/order/domain/services"
 	"net/http"
 
@@ -16,7 +17,7 @@ type OrderController interface {
 	// UpdateOrder(gCtx *gin.Context)
 }
 
-// NewOrderController is...
+// NewOrderController creates a new instance of the orderController
 func NewOrderController(orderService services.OrderService) OrderController {
 	return &orderController{orderService: orderService}
 }
@@ -48,36 +49,22 @@ type orderController struct {
 // c.Send(gCtx, order)
 // }
 
-type URI struct {
-	OrderID int64 `json:"order_id" uri:"id"`
-}
-
-// ResetCart removes all items from cart and resets all the fields and returns updated cart
+// GetOrder handles incoming requests to retrieve an order by its ID.
 func (c *orderController) GetOrder(gCtx *gin.Context) {
-	// cart, err := c.cartService.ResetCart(gCtx.Request.Context())
-	// if err != nil {
-	// 	c.SendWithError(gCtx, err)
-	// 	return
-	// }
+	input := entities.GetOrderByIDInput{}
 
-	// cartModel, err := mappers.NewCartMapper().ToModel(*cart)
-	// if err != nil {
-	// 	c.SendWithError(gCtx, err)
-	// 	return
-	// }
-
-	// var orderID = gCtx.Param("id")
-	uri := URI{}
-
-	if err := gCtx.BindUri(&uri); err != nil {
+	if err := gCtx.BindUri(&input); err != nil {
 		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
 		return
 	}
 
-	order, _ := c.orderService.GetOrderByID(uri.OrderID)
+	order, err := c.orderService.GetOrderByID(input.OrderID)
+	if err != nil {
+		c.SendWithError(gCtx, err)
+		return
+	}
 
 	c.Send(gCtx, order)
-
 }
 
 // AddToCart adds an item in cart based on inputs and returns updated cart or error
