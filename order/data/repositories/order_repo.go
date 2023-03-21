@@ -19,6 +19,41 @@ type orderRepo struct {
 	db *gorm.DB
 }
 
+// GetByFilters fetches orders with the provided filters.
+func (or *orderRepo) GetByFilters(filters entities.OrderFiltersInput) (*[]models.Order, error) {
+	var orders []models.Order
+
+	db := or.db.Table(constants.TABLE_NAME_ORDERS)
+	db = or.setFilters(filters, db)
+
+	err := db.Preload("OrderItem").Limit(filters.Limit).Offset(filters.Offset).Order("id desc").Find(&orders).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &orders, nil
+}
+
+func (or *orderRepo) setFilters(filters entities.OrderFiltersInput, db *gorm.DB) *gorm.DB {
+	if filters.OrderID != 0 {
+		db = db.Where("orders.id = ?", filters.OrderID)
+	}
+
+	if filters.CurrencyUnit != "" {
+		db = db.Where("orders.currency_unit = ?", filters.CurrencyUnit)
+	}
+
+	if filters.Total != 0 {
+		db = db.Where("orders.total >?", filters.Total)
+	}
+
+	if filters.Status != "" {
+		db = db.Where("orders.status = ?", filters.Status)
+	}
+
+	return db
+}
+
 // GetByID fetches order with the provided id.
 func (or *orderRepo) GetByID(id int64) (*models.Order, error) {
 	order := models.Order{}
@@ -41,9 +76,9 @@ func (or *orderRepo) GetByID(id int64) (*models.Order, error) {
 func (or *orderRepo) Create(input entities.CreateOrderInput) (*models.Order, error) {
 	// create a new order from input parameters
 	order := models.Order{
-		Total:       input.Total,
-		Status:      input.Status,
-		CurrentUnit: input.CurrentUnit,
+		Total:        input.Total,
+		Status:       input.Status,
+		CurrencyUnit: input.CurrencyUnit,
 	}
 
 	// insert order into the database

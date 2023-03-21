@@ -3,11 +3,11 @@ package models
 import "demo/oms/order/data/constants"
 
 type Order struct {
-	ID          int64       `json:"id" gorm:"primaryKey;column:id" `
-	Status      string      `json:"status" gorm:"column:status" `
-	Total       float32     `json:"total" gorm:"column:total" `
-	CurrentUnit string      `json:"current_unit" gorm:"column:current_unit" `
-	OrderItem   []OrderItem `json:"items" gorm:"foreignKey:OrderID; references:ID"`
+	ID           int64       `json:"id" gorm:"primaryKey;column:id" `
+	Status       string      `json:"status" gorm:"column:status" `
+	Total        float32     `json:"total" gorm:"column:total" `
+	CurrencyUnit string      `json:"currency_unit" gorm:"column:currency_unit" `
+	OrderItem    []OrderItem `json:"items" gorm:"foreignKey:OrderID; references:ID"`
 }
 
 func (Order) TableName() string {

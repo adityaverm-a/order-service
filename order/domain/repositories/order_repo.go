@@ -8,6 +8,7 @@ import (
 // OrderRepository is...
 type OrderRepository interface {
 	GetByID(id int64) (*models.Order, error)
+	GetByFilters(filters entities.OrderFiltersInput) (*[]models.Order, error)
 	Create(input entities.CreateOrderInput) (*models.Order, error)
 	Update(input entities.UpdateOrderStatusInput) (*models.Order, error)
 }

@@ -22,9 +22,9 @@ func setupRoutes(r *gin.RouterGroup) {
 	orderController = container.InjectOrderController()
 
 	// a GET request to /orders will fetch  all orders
-	// r.GET("/orders", func(c *gin.Context) {
-	// 	orderController.GetOrder(c)
-	// })
+	r.GET("/orders", func(c *gin.Context) {
+		orderController.GetOrders(c)
+	})
 
 	// a POST request to /order will create an order
 	r.POST("/order", func(c *gin.Context) {

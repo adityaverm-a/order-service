@@ -11,6 +11,7 @@ import (
 // OrderService is...
 type OrderService interface {
 	GetOrderByID(id int64) (*models.Order, error)
+	GetByFilters(filters entities.OrderFiltersInput) (*[]models.Order, error)
 	CreateOrder(input entities.CreateOrderInput) (*models.Order, error)
 	UpdateOrderStatus(input entities.UpdateOrderStatusInput) (*models.Order, error)
 }
@@ -22,6 +23,11 @@ func NewOrderService(repo repositories.OrderRepository) OrderService {
 
 type orderService struct {
 	repo repositories.OrderRepository
+}
+
+// The GetByFilters method of the orderService struct utilizes the OrderRepository instance, by calling the GetByFilters method on it, and returns all orders from the given filters and errors if received.
+func (service *orderService) GetByFilters(filters entities.OrderFiltersInput) (*[]models.Order, error) {
+	return service.repo.GetByFilters(filters)
 }
 
 // The GetOrderByID method of the orderService struct utilizes the OrderRepository instance, by calling the GetByID method on it, and returns any order and errors if received.

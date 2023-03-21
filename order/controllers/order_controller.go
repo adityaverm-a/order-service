@@ -11,8 +11,8 @@ import (
 
 // OrderController is...
 type OrderController interface {
-	// GetOrders(gCtx *gin.Context)
 	GetOrder(gCtx *gin.Context)
+	GetOrders(gCtx *gin.Context)
 	CreateOrder(gCtx *gin.Context)
 	UpdateOrderStatus(gCtx *gin.Context)
 }
@@ -27,27 +27,22 @@ type orderController struct {
 	orderService services.OrderService
 }
 
-// GetCart gets the cart of a specific user (logged in or logged out)
-// func (c *orderController) GetOrders(gCtx *gin.Context) {
-// var input services.GetCartInput
-// if err := gCtx.ShouldBindQuery(&input); err != nil {
-// 	gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
-// 	return
-// }
-// cart, err := c.cartService.GetCart(gCtx.Request.Context(), &input)
-// if err != nil {
-// 	c.SendWithError(gCtx, err)
-// 	return
-// }
+// GetOrders handles incoming requests to retrieve orders by given filters.
+func (c *orderController) GetOrders(gCtx *gin.Context) {
+	var input entities.OrderFiltersInput
+	if err := gCtx.ShouldBindQuery(&input); err != nil {
+		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
+		return
+	}
 
-// cartModel, err := mappers.NewCartMapper().ToModel(*cart)
-// if err != nil {
-// 	c.SendWithError(gCtx, err)
-// 	return
-// }
+	orders, err := c.orderService.GetByFilters(input)
+	if err != nil {
+		c.SendWithError(gCtx, err)
+		return
+	}
 
-// c.Send(gCtx, order)
-// }
+	c.Send(gCtx, orders)
+}
 
 // GetOrder handles incoming requests to retrieve an order by its ID.
 func (c *orderController) GetOrder(gCtx *gin.Context) {
@@ -70,10 +65,6 @@ func (c *orderController) GetOrder(gCtx *gin.Context) {
 // AddToCart adds an item in cart based on inputs and returns updated order or error
 func (c *orderController) CreateOrder(gCtx *gin.Context) {
 	var input entities.CreateOrderInput
-	if err := gCtx.ShouldBindQuery(&input); err != nil {
-		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
-		return
-	}
 
 	if err := gCtx.ShouldBind(&input); err != nil {
 		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
