@@ -13,6 +13,7 @@ This webservice has been implemented in golang and the set of exposed APIs are R
   - [Table of Content](#table-of-content)
   - [Setting up Development Environment](#setting-up-development-environment)
     - [Configuring env values ](#configuring-env-values-)
+    - [Configuring env values ](#configuring-env-values--1)
     - [Launching the Debugger ](#launching-the-debugger-)
     - [Unit Testing Guidelines ](#unit-testing-guidelines-)
         - [To run unit tests recursively, run -\> go test ./...](#to-run-unit-tests-recursively-run---go-test-)
@@ -37,6 +38,11 @@ This file should on the root of source code.
           db: <db_name>
     port: <:port>
     # port: :5000
+
+### <a name="configure-env">Configuring env values <a/>
+Use below command to start your server
+
+    go run cmd/main.go
 
 ### <a name="starting-debugger">Launching the Debugger <a/>
 
