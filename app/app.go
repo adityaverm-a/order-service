@@ -4,6 +4,8 @@ import (
 	"demo/oms/app/router"
 	"demo/oms/app/server"
 	"demo/oms/config"
+	"demo/oms/datasources"
+	"log"
 
 	"fmt"
 )
@@ -14,12 +16,12 @@ const defaultPort = ":5000"
 func InitApp() {
 	config.LoadConfig(".")
 
-	// _, err := datasources.Get()
+	_, err := datasources.Get()
 
-	// if err != nil {
-	// 	log.Println(err.Error())
-	// 	return
-	// }
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 
 	// Creates a router
 	router := router.Create()
