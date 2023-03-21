@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "2eff58cc-8a5b-4533-9437-6145995b72d1",
+		"name": "Order Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20122275"
+	},
+	"item": [
+		{
+			"name": "Get an Order",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/v1/order/{{OrderID}}",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"v1",
+						"order",
+						"{{OrderID}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/v1/order/{{OrderID}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"v1",
+								"order",
+								"{{OrderID}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 21 Mar 2023 10:05:27 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "191"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"status\": \"PENDING_INVOICE\",\n        \"total\": 12.4,\n        \"currency_unit\": \"USD\",\n        \"items\": [\n            {\n                \"id\": 1,\n                \"order_id\": 1,\n                \"description\": \"a product description\",\n                \"price\": 12.4,\n                \"quantity\": 1\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Create an Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"SHIPPED\",\n    \"items\": [\n        {\n            \"description\": \"a product description\",\n            \"price\": 123.40,\n            \"quantity\": 1\n        }\n    ],\n    \"total\": 123.40,\n    \"currency_unit\": \"USD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/v1/order",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"v1",
+						"order"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"SHIPPED\",\n    \"items\": [\n        {\n            \"description\": \"a product description\",\n            \"price\": 123.40,\n            \"quantity\": 1\n        }\n    ],\n    \"total\": 123.40,\n    \"currencyUnit\": \"USD\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/v1/order",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"v1",
+								"order"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 21 Mar 2023 16:07:28 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "185"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"success\",\n    \"data\": {\n        \"id\": 4,\n        \"status\": \"SHIPPED\",\n        \"total\": 123.4,\n        \"currency_unit\": \"USD\",\n        \"items\": [\n            {\n                \"id\": 4,\n                \"order_id\": 4,\n                \"description\": \"a product description\",\n                \"price\": 123.4,\n                \"quantity\": 1\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Change an Order's Status",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{OrderID}},\n    \"status\": \"COMPLETED\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/v1/order/change-status",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"v1",
+						"order",
+						"change-status"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": {{OrderID}},\n    \"status\": \"COMPLETED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/v1/order/change-status",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"v1",
+								"order",
+								"change-status"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 21 Mar 2023 16:38:50 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "185"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"status\": \"COMPLETED\",\n        \"total\": 12.4,\n        \"currency_unit\": \"USD\",\n        \"items\": [\n            {\n                \"id\": 1,\n                \"order_id\": 1,\n                \"description\": \"a product description\",\n                \"price\": 12.4,\n                \"quantity\": 1\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Orders by filters",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/v1/orders?limit=2&offset=1",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"v1",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": "offset",
+							"value": "1"
+						},
+						{
+							"key": "total",
+							"value": "15",
+							"disabled": true
+						},
+						{
+							"key": "currency_unit",
+							"value": "USD",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "SHIPPED",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "3",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/v1/orders?limit=2&offset=1",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"v1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "offset",
+									"value": "1"
+								},
+								{
+									"key": "total",
+									"value": "15",
+									"disabled": true
+								},
+								{
+									"key": "currency_unit",
+									"value": "USD",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "SHIPPED",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "3",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 21 Mar 2023 18:30:09 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "341"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"success\",\n    \"data\": [\n        {\n            \"id\": 3,\n            \"status\": \"Pending\",\n            \"total\": 123.4,\n            \"currency_unit\": \"\",\n            \"items\": [\n                {\n                    \"id\": 3,\n                    \"order_id\": 3,\n                    \"description\": \"a product description\",\n                    \"price\": 123.4,\n                    \"quantity\": 1\n                }\n            ]\n        },\n        {\n            \"id\": 2,\n            \"status\": \"Pending\",\n            \"total\": 123.4,\n            \"currency_unit\": \"\",\n            \"items\": [\n                {\n                    \"id\": 2,\n                    \"order_id\": 2,\n                    \"description\": \"a product description\",\n                    \"price\": 123.4,\n                    \"quantity\": 1\n                }\n            ]\n        }\n    ]\n}"
+				}
+			]
+		}
+	]
+}

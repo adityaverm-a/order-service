@@ -5,7 +5,6 @@ import (
 	"demo/oms/order/data/models"
 	"demo/oms/order/domain/entities"
 	"demo/oms/order/domain/repositories"
-	"errors"
 
 	"gorm.io/gorm"
 )
@@ -56,16 +55,15 @@ func (or *orderRepo) setFilters(filters entities.OrderFiltersInput, db *gorm.DB)
 
 // GetByID fetches order with the provided id.
 func (or *orderRepo) GetByID(id int64) (*models.Order, error) {
-	order := models.Order{}
+	var order models.Order
 
 	db := or.db.Table(constants.TABLE_NAME_ORDERS)
 	err := db.Preload("OrderItem").Where("orders.id = ?", id).Find(&order).Error
-
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+	if err != nil {
 		return nil, err
 	}
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	if order.ID == 0 {
 		return nil, OrderNotFound
 	}
 
@@ -115,7 +113,11 @@ func (or *orderRepo) Create(input entities.CreateOrderInput) (*models.Order, err
 // Update changes order statuses as of now, but can be extended to update an order!
 func (or *orderRepo) Update(input entities.UpdateOrderStatusInput) (*models.Order, error) {
 	result := or.db.Model(&models.Order{}).Where("id = ?", input.OrderID).Updates(models.Order{Status: input.Status})
-	if result.Error != nil || result.RowsAffected == 0 {
+	if result.RowsAffected == 0 {
+		return nil, OrderStatusAlreadyUpdated
+	}
+
+	if result.Error != nil {
 		return nil, result.Error
 	}
 

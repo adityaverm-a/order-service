@@ -35,7 +35,7 @@ func (c *orderController) GetOrders(gCtx *gin.Context) {
 		return
 	}
 
-	orders, err := c.orderService.GetByFilters(input)
+	orders, err := c.orderService.GetOrdersByFilters(input)
 	if err != nil {
 		c.SendWithError(gCtx, err)
 		return
@@ -83,11 +83,6 @@ func (c *orderController) CreateOrder(gCtx *gin.Context) {
 // UpdateOrderStatus updates an order's status based on inputs and returns updated order or error
 func (c *orderController) UpdateOrderStatus(gCtx *gin.Context) {
 	var input entities.UpdateOrderStatusInput
-	if err := gCtx.ShouldBindQuery(&input); err != nil {
-		c.SendWithError(gCtx, err)
-		return
-	}
-
 	if err := gCtx.ShouldBind(&input); err != nil {
 		c.SendWithError(gCtx, err)
 		return

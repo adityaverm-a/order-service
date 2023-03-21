@@ -1,9 +1,5 @@
 # Order Management Microservice in Golang
 
-WHATS next?
-Authorization (JWT)??
-Logger?
-
 ## Introduction
 This webservice has been implemented in golang and the set of exposed APIs are RESTful.
 
@@ -44,6 +40,7 @@ Use below command to start your server
 
     go run cmd/main.go
 
+Once the server is up & runnning, use the provided Postman Collection!
 ### <a name="starting-debugger">Launching the Debugger <a/>
 
 Create a file `launch.json` in `.vscode` directory ( .vscode directory should be on the root) with the following content.

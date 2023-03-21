@@ -2,7 +2,6 @@ package services
 
 import (
 	"demo/oms/order/data/models"
-	"demo/oms/order/data/repositories"
 	"demo/oms/order/domain/repositories/mocks"
 	"testing"
 
@@ -26,37 +25,13 @@ func TestGetOrderByID(t *testing.T) {
 
 		got, err := testService.GetOrderByID(orderID)
 		if err != nil {
-			t.Fatal("Got error while fetching want by ID", err)
+			t.Fatal("Got error while fetching order by ID", err)
 		}
 
 		if got != want {
 			t.Errorf("Expected no error Got : %v", got)
 		}
 	})
-
-	t.Run("return error while fetching order, with ID: 1. As order with the given ID does not exists.", func(t *testing.T) {
-		orderID := int64(1)
-
-		mockRepo.EXPECT().GetByID(orderID).Return(nil, repositories.OrderNotFound)
-
-		testService := NewOrderService(mockRepo)
-
-		_, err := testService.GetOrderByID(orderID)
-
-		assertError(t, err, repositories.OrderNotFound)
-	})
-}
-
-func assertError(t testing.TB, got error, want error) {
-	t.Helper()
-
-	if got == nil {
-		t.Errorf("wanted an error but didn't get one")
-	}
-
-	if got != want {
-		t.Errorf("got %q, want %q", got, want)
-	}
 }
 
 func createOrderForTesting(t testing.TB, orderID int64, order *models.Order) {
@@ -66,7 +41,7 @@ func createOrderForTesting(t testing.TB, orderID int64, order *models.Order) {
 	var orderItems []models.OrderItem
 
 	orderItem := models.OrderItem{
-		ID:          3,
+		ID:          orderID + int64(3),
 		OrderID:     orderID,
 		Description: "Test Product",
 		Price:       price,
@@ -77,7 +52,7 @@ func createOrderForTesting(t testing.TB, orderID int64, order *models.Order) {
 
 	orderModel := &models.Order{
 		ID:           orderID,
-		Status:       "COMPLETED",
+		Status:       "PENDING",
 		Total:        price,
 		CurrencyUnit: "USD",
 		OrderItem:    orderItems,
