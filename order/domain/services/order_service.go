@@ -12,6 +12,7 @@ import (
 type OrderService interface {
 	GetOrderByID(id int64) (*models.Order, error)
 	CreateOrder(input entities.CreateOrderInput) (*models.Order, error)
+	UpdateOrderStatus(input entities.UpdateOrderStatusInput) (*models.Order, error)
 }
 
 // The NewOrderService function is a factory function that returns a new instance of the orderService
@@ -31,4 +32,9 @@ func (service *orderService) GetOrderByID(id int64) (*models.Order, error) {
 // The CreateOrder method of the orderService struct utilizes the OrderRepository instance, by calling the Create method on it, and returns the order created and errors if received.
 func (service *orderService) CreateOrder(input entities.CreateOrderInput) (*models.Order, error) {
 	return service.repo.Create(input)
+}
+
+// The UpdateOrderStatus method of the orderService struct utilizes the OrderRepository instance, by calling the Update method on it, and returns the order with updated status and errors if received.
+func (service *orderService) UpdateOrderStatus(input entities.UpdateOrderStatusInput) (*models.Order, error) {
+	return service.repo.Update(input)
 }

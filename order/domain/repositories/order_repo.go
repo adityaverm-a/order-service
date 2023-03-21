@@ -9,4 +9,5 @@ import (
 type OrderRepository interface {
 	GetByID(id int64) (*models.Order, error)
 	Create(input entities.CreateOrderInput) (*models.Order, error)
+	Update(input entities.UpdateOrderStatusInput) (*models.Order, error)
 }

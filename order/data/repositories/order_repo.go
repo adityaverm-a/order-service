@@ -76,3 +76,18 @@ func (or *orderRepo) Create(input entities.CreateOrderInput) (*models.Order, err
 
 	return &order, nil
 }
+
+// Update changes order statuses as of now, but can be extended to update an order!
+func (or *orderRepo) Update(input entities.UpdateOrderStatusInput) (*models.Order, error) {
+	result := or.db.Model(&models.Order{}).Where("id = ?", input.OrderID).Updates(models.Order{Status: input.Status})
+	if result.Error != nil || result.RowsAffected == 0 {
+		return nil, result.Error
+	}
+
+	order, err := or.GetByID(input.OrderID)
+	if err != nil {
+		return nil, err
+	}
+
+	return order, nil
+}

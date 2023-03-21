@@ -36,8 +36,8 @@ func setupRoutes(r *gin.RouterGroup) {
 		orderController.GetOrder(c)
 	})
 
-	// a POST request to /order/change-status/:id will update status for that order
-	// r.POST("/order/change-status/:id", func(c *gin.Context) {
-	// 	orderController.GetOrder(c)
-	// })
+	// a POST request to /order/change-status will update status for that order
+	r.POST("/order/change-status", func(c *gin.Context) {
+		orderController.UpdateOrderStatus(c)
+	})
 }

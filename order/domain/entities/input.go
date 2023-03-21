@@ -5,14 +5,19 @@ type GetOrderByIDInput struct {
 }
 
 type CreateOrderInput struct {
-	Total       float32                `json:"total"`
-	CurrentUnit string                 `json:"currencyUnit"`
 	Status      string                 `json:"status"`
+	Total       float32                `json:"total"`
 	OrderItem   []CreateOrderItemInput `json:"items"`
+	CurrentUnit string                 `json:"currencyUnit"`
 }
 
 type CreateOrderItemInput struct {
-	Description string  `json:"description"`
 	Price       float32 `json:"price"`
 	Quantity    int64   `json:"quantity"`
+	Description string  `json:"description"`
+}
+
+type UpdateOrderStatusInput struct {
+	OrderID int64  `json:"id"`
+	Status  string `json:"status"`
 }

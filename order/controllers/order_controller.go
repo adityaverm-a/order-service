@@ -14,7 +14,7 @@ type OrderController interface {
 	// GetOrders(gCtx *gin.Context)
 	GetOrder(gCtx *gin.Context)
 	CreateOrder(gCtx *gin.Context)
-	// UpdateOrder(gCtx *gin.Context)
+	UpdateOrderStatus(gCtx *gin.Context)
 }
 
 // NewOrderController creates a new instance of the orderController
@@ -67,7 +67,7 @@ func (c *orderController) GetOrder(gCtx *gin.Context) {
 	c.Send(gCtx, order)
 }
 
-// AddToCart adds an item in cart based on inputs and returns updated cart or error
+// AddToCart adds an item in cart based on inputs and returns updated order or error
 func (c *orderController) CreateOrder(gCtx *gin.Context) {
 	var input entities.CreateOrderInput
 	if err := gCtx.ShouldBindQuery(&input); err != nil {
@@ -89,35 +89,24 @@ func (c *orderController) CreateOrder(gCtx *gin.Context) {
 	c.Send(gCtx, order)
 }
 
-// AddMultipleItemsToCart adds multiple items in cart based on inputs and returns updated cart or error
-// func (c *orderController) UpdateOrder(gCtx *gin.Context) {
-// 	var input models.AddMultipleItemsInput
-// 	if err := gCtx.ShouldBindQuery(&input); err != nil {
-// 		c.SendWithError(gCtx, err)
-// 		return
-// 	}
+// UpdateOrderStatus updates an order's status based on inputs and returns updated order or error
+func (c *orderController) UpdateOrderStatus(gCtx *gin.Context) {
+	var input entities.UpdateOrderStatusInput
+	if err := gCtx.ShouldBindQuery(&input); err != nil {
+		c.SendWithError(gCtx, err)
+		return
+	}
 
-// 	if err := gCtx.ShouldBind(&input); err != nil {
-// 		c.SendWithError(gCtx, err)
-// 		return
-// 	}
+	if err := gCtx.ShouldBind(&input); err != nil {
+		c.SendWithError(gCtx, err)
+		return
+	}
 
-// 	addMultipleItemsInput, err := mappers.NewAddMultipleItemsInputMapper().ToEntity(input)
-// 	if err != nil {
-// 		c.SendWithError(gCtx, err)
-// 	}
+	order, err := c.orderService.UpdateOrderStatus(input)
+	if err != nil {
+		c.SendWithError(gCtx, err)
+		return
+	}
 
-// 	cart, err := c.cartService.AddMultipleItems(gCtx.Request.Context(), *addMultipleItemsInput)
-// 	if err != nil {
-// 		c.SendWithError(gCtx, err)
-// 		return
-// 	}
-
-// 	cartModel, err := mappers.NewCartMapper().ToModel(*cart)
-// 	if err != nil {
-// 		c.SendWithError(gCtx, err)
-// 		return
-// 	}
-
-// 	c.Send(gCtx, cartModel)
-// }
+	c.Send(gCtx, order)
+}
