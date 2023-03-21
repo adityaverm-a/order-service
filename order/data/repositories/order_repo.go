@@ -37,13 +37,16 @@ func (or *orderRepo) GetByID(id int64) (*models.Order, error) {
 	return &order, nil
 }
 
+// Create adds an order to the database.
 func (or *orderRepo) Create(input entities.CreateOrderInput) (*models.Order, error) {
+	// create a new order from input parameters
 	order := models.Order{
-		Status:      "Pending",
 		Total:       input.Total,
+		Status:      input.Status,
 		CurrentUnit: input.CurrentUnit,
 	}
 
+	// insert order into the database
 	orderResult := or.db.Create(&order)
 	if orderResult.Error != nil || orderResult.RowsAffected == 0 {
 		return nil, orderResult.Error
@@ -51,13 +54,15 @@ func (or *orderRepo) Create(input entities.CreateOrderInput) (*models.Order, err
 
 	var orderItems []models.OrderItem
 	for _, item := range input.OrderItem {
+		// creating each orderItem from input parameters
 		orderItem := models.OrderItem{
 			OrderID:     order.ID,
-			Description: item.Description,
 			Price:       item.Price,
 			Quantity:    item.Quantity,
+			Description: item.Description,
 		}
 
+		// insert the orderItem into the database
 		orderItemResult := or.db.Create(&orderItem)
 		if orderItemResult.Error != nil || orderItemResult.RowsAffected == 0 {
 			return nil, orderItemResult.Error
@@ -66,6 +71,7 @@ func (or *orderRepo) Create(input entities.CreateOrderInput) (*models.Order, err
 		orderItems = append(orderItems, orderItem)
 	}
 
+	// assign the orderItems slice to the OrderItem field of the order
 	order.OrderItem = orderItems
 
 	return &order, nil

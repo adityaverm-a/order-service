@@ -23,11 +23,12 @@ type orderService struct {
 	repo repositories.OrderRepository
 }
 
-// The GetOrderByID method of the orderService struct utilizes the OrderRepository instance, by calling the GetByID method on it, and returns any order and errors received.
+// The GetOrderByID method of the orderService struct utilizes the OrderRepository instance, by calling the GetByID method on it, and returns any order and errors if received.
 func (service *orderService) GetOrderByID(id int64) (*models.Order, error) {
 	return service.repo.GetByID(id)
 }
 
+// The CreateOrder method of the orderService struct utilizes the OrderRepository instance, by calling the Create method on it, and returns the order created and errors if received.
 func (service *orderService) CreateOrder(input entities.CreateOrderInput) (*models.Order, error) {
 	return service.repo.Create(input)
 }

@@ -7,6 +7,7 @@ type GetOrderByIDInput struct {
 type CreateOrderInput struct {
 	Total       float32                `json:"total"`
 	CurrentUnit string                 `json:"currencyUnit"`
+	Status      string                 `json:"status"`
 	OrderItem   []CreateOrderItemInput `json:"items"`
 }
 
