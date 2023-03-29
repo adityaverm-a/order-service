@@ -6,6 +6,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // getGORMClient connects to a mysql server and returns ...
@@ -16,6 +17,7 @@ func getGORMClient() (*gorm.DB, error) {
 
 	cfg := &gorm.Config{
 		SkipDefaultTransaction: true,
+		Logger:                 logger.Default.LogMode(logger.Info),
 	}
 	db, err := gorm.Open(mysql.Open(dataSourceName), cfg)
 	if err != nil {

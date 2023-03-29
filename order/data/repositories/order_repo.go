@@ -5,6 +5,8 @@ import (
 	"demo/oms/order/data/models"
 	"demo/oms/order/domain/entities"
 	"demo/oms/order/domain/repositories"
+	"fmt"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -25,9 +27,18 @@ func (or *orderRepo) GetByFilters(filters entities.OrderFiltersInput) (*[]models
 	db := or.db.Table(constants.TABLE_NAME_ORDERS)
 	db = or.setFilters(filters, db)
 
-	err := db.Preload("OrderItem").Limit(filters.Limit).Offset(filters.Offset).Order("id desc").Find(&orders).Error
+	sortOrderBy, err := or.validateAndReturnSortQuery(filters)
 	if err != nil {
 		return nil, err
+	}
+
+	err = db.Preload("OrderItem").Joins("inner join order_items oi on oi.order_id = orders.id ").Limit(filters.Limit).Offset(filters.Offset).Order(sortOrderBy).Find(&orders).Debug().Error
+	if err != nil {
+		return nil, err
+	}
+
+	if len(orders) == 0 {
+		return nil, ErrorOrdersNotFound
 	}
 
 	return &orders, nil
@@ -39,18 +50,54 @@ func (or *orderRepo) setFilters(filters entities.OrderFiltersInput, db *gorm.DB)
 	}
 
 	if filters.CurrencyUnit != "" {
-		db = db.Where("orders.currency_unit = ?", filters.CurrencyUnit)
+		db = db.Where("orders.currency_unit like ?", filters.CurrencyUnit)
 	}
 
 	if filters.Total != 0 {
-		db = db.Where("orders.total >?", filters.Total)
+		db = db.Where("orders.total = ?", filters.Total)
 	}
 
 	if filters.Status != "" {
 		db = db.Where("orders.status = ?", filters.Status)
 	}
 
+	if !filters.Item.IsEmpty() {
+		db = or.setOrderItemFilters(filters.Item, db)
+	}
+
 	return db
+}
+
+func (or *orderRepo) setOrderItemFilters(orderItemFilter entities.OrderItemFiltersInput, db *gorm.DB) *gorm.DB {
+	if orderItemFilter.Price != 0 {
+		db = db.Where("oi.price = ?", orderItemFilter.Price)
+	}
+
+	if orderItemFilter.Quantity != 0 {
+		db = db.Where("oi.quantity = ?", orderItemFilter.Quantity)
+	}
+
+	if orderItemFilter.Description != "" {
+		db = db.Where("oi.description like ?", "%"+orderItemFilter.Description+"%")
+	}
+
+	return db
+}
+
+func (or *orderRepo) validateAndReturnSortQuery(filters entities.OrderFiltersInput) (string, error) {
+	order := filters.GetOrder()
+	if order != "desc" && order != "asc" {
+		return "", ErrorOrderByInvalid
+
+	}
+
+	if !filters.VaidateSortBy() && filters.SortBy != "" {
+		return "", ErrorInvalidSortBy
+	}
+
+	sortBy := filters.GetSortBy()
+
+	return fmt.Sprintf("%s %s", sortBy, strings.ToUpper(order)), nil
 }
 
 // GetByID fetches order with the provided id.
@@ -64,7 +111,7 @@ func (or *orderRepo) GetByID(id int64) (*models.Order, error) {
 	}
 
 	if order.ID == 0 {
-		return nil, OrderNotFound
+		return nil, ErrorOrderNotFound
 	}
 
 	return &order, nil
@@ -114,7 +161,7 @@ func (or *orderRepo) Create(input entities.CreateOrderInput) (*models.Order, err
 func (or *orderRepo) Update(input entities.UpdateOrderStatusInput) (*models.Order, error) {
 	result := or.db.Model(&models.Order{}).Where("id = ?", input.OrderID).Updates(models.Order{Status: input.Status})
 	if result.RowsAffected == 0 {
-		return nil, OrderStatusAlreadyUpdated
+		return nil, ErrorOrderStatusAlreadyUpdated
 	}
 
 	if result.Error != nil {

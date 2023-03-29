@@ -30,7 +30,7 @@ type orderController struct {
 // GetOrders handles incoming requests to retrieve orders by given filters.
 func (c *orderController) GetOrders(gCtx *gin.Context) {
 	var input entities.OrderFiltersInput
-	if err := gCtx.ShouldBindQuery(&input); err != nil {
+	if err := gCtx.BindJSON(&input); err != nil {
 		gCtx.JSON(http.StatusBadRequest, gin.H{"code": "failed", "msg": err.Error()})
 		return
 	}
