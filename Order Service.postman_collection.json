@@ -213,11 +213,23 @@
 		},
 		{
 			"name": "Get Orders by filters",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"total\": 12.4\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{BaseURL}}/v1/orders?limit=2&offset=1",
+					"raw": "{{BaseURL}}/v1/orders",
 					"host": [
 						"{{BaseURL}}"
 					],
@@ -227,12 +239,9 @@
 					],
 					"query": [
 						{
-							"key": "limit",
-							"value": "2"
-						},
-						{
 							"key": "offset",
-							"value": "1"
+							"value": "1",
+							"disabled": true
 						},
 						{
 							"key": "total",
@@ -323,6 +332,51 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"code\": \"success\",\n    \"data\": [\n        {\n            \"id\": 3,\n            \"status\": \"Pending\",\n            \"total\": 123.4,\n            \"currency_unit\": \"\",\n            \"items\": [\n                {\n                    \"id\": 3,\n                    \"order_id\": 3,\n                    \"description\": \"a product description\",\n                    \"price\": 123.4,\n                    \"quantity\": 1\n                }\n            ]\n        },\n        {\n            \"id\": 2,\n            \"status\": \"Pending\",\n            \"total\": 123.4,\n            \"currency_unit\": \"\",\n            \"items\": [\n                {\n                    \"id\": 2,\n                    \"order_id\": 2,\n                    \"description\": \"a product description\",\n                    \"price\": 123.4,\n                    \"quantity\": 1\n                }\n            ]\n        }\n    ]\n}"
+				},
+				{
+					"name": "All Possible Inputs [Body-JSON]",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"status\": \"SHIPPED\",\n    \"total\": 19.00,\n    \"currency_unit\": \"USD\",\n    \"item\": {\n        \"price\": 19.00,\n        \"quantity\": 1,\n        \"currency_unit\": \"USD\"\n    },\n    \"limit\": 2,\n    \"offset\": 1,\n    \"sortBy\": \"id\",\n    \"order\": \"asc\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/v1/orders",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Mar 2023 08:05:20 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "68"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": \"failed\",\n    \"msg\": \"Orders with the given filters, not found!!\"\n}"
 				}
 			]
 		}
