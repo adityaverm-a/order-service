@@ -10,8 +10,8 @@ This webservice has been implemented in golang and the set of exposed APIs are R
   - [Setting up Development Environment](#setting-up-development-environment)
     - [Configuring env values ](#configuring-env-values-)
     - [Running the Server ](#running-the-server-)
+    - [Migrations ](#migrations-)
     - [Launching the Debugger ](#launching-the-debugger-)
-    - [Launching the Debugger ](#launching-the-debugger--1)
     - [Unit Testing Guidelines ](#unit-testing-guidelines-)
         - [To run unit tests recursively, run -\> go test ./...](#to-run-unit-tests-recursively-run---go-test-)
 
@@ -43,7 +43,7 @@ Use below command to start your server
 
 Once the server is up & runnning, use the provided Postman Collection!
 
-### <a name="starting-debugger">Launching the Debugger <a/>
+### <a name="starting-debugger">Migrations <a/>
 Run Database Migrations
 
 * For running up :
