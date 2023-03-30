@@ -54,6 +54,10 @@ Run Database Migrations
 
     `go run ./migrations/down/main.go`
 
+* For initializing tables with some data run :
+
+    `go run ./migrations/init/main.go`
+
 ### <a name="starting-debugger">Launching the Debugger <a/>
 
 Create a file `launch.json` in `.vscode` directory ( .vscode directory should be on the root) with the following content.
