@@ -11,6 +11,7 @@ This webservice has been implemented in golang and the set of exposed APIs are R
     - [Configuring env values ](#configuring-env-values-)
     - [Running the Server ](#running-the-server-)
     - [Launching the Debugger ](#launching-the-debugger-)
+    - [Launching the Debugger ](#launching-the-debugger--1)
     - [Unit Testing Guidelines ](#unit-testing-guidelines-)
         - [To run unit tests recursively, run -\> go test ./...](#to-run-unit-tests-recursively-run---go-test-)
 
@@ -41,6 +42,18 @@ Use below command to start your server
     go run cmd/main.go
 
 Once the server is up & runnning, use the provided Postman Collection!
+
+### <a name="starting-debugger">Launching the Debugger <a/>
+Run Database Migrations
+
+* For running up :
+
+    `go run ./migrations/up/main.go`
+
+* For running down :
+
+    `go run ./migrations/down/main.go`
+
 ### <a name="starting-debugger">Launching the Debugger <a/>
 
 Create a file `launch.json` in `.vscode` directory ( .vscode directory should be on the root) with the following content.
